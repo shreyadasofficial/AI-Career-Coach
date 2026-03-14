@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Career Coach</title><!-- jsPDF for PDF download --><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><style>
+:root{--primary:#2c3e50;--secondary:#3498db;--success:#27ae60;--light:#ecf0f1}
+body{font-family:'Segoe UI',sans-serif;margin:0;background:var(--light)}
+header{background:var(--primary);color:white;text-align:center;padding:35px}
+nav{background:#1f2d3a;padding:10px;text-align:center}
+nav button{background:transparent;border:1px solid var(--secondary);color:white;padding:8px 18px;margin:5px;border-radius:20px;cursor:pointer}
+nav button:hover{background:var(--secondary)}
+.container{max-width:1000px;margin:30px auto;padding:0 20px}
+.card{background:white;padding:30px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);margin-bottom:25px}
+input,textarea,select{width:100%;padding:12px;margin-top:10px;border:1px solid #ddd;border-radius:8px}
+textarea{min-height:120px}
+button.main{background:var(--success);color:white;border:none;padding:12px;width:100%;border-radius:8px;margin-top:15px;font-size:16px;cursor:pointer}
+.hidden{display:none}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:20px}
+.feature{background:#f8f9fa;padding:20px;border-radius:10px;text-align:center}
+.question{border:1px solid #eee;padding:15px;margin-top:10px;border-radius:8px}
+footer{background:var(--primary);color:#bdc3c7;text-align:center;padding:25px;margin-top:40px}
+</style></head><body><header>
+<h1>AI Career Coach</h1>
+<p>Smart Resume Builder • Interview Practice • Career Guidance</p>
+<div id="status">Status: Guest</div>
+</header><nav>
+<button onclick="showSection('home')">Home</button>
+<button onclick="showSection('login')">Login</button>
+<button onclick="showSection('signup')">Register</button>
+<button onclick="openDashboard()">Dashboard</button>
+</nav><div class="container"><!-- HOME --><section id="home">
+<div class="card">
+<h2>Overview</h2>
+<p>
+AI Career Coach helps students prepare for jobs by creating professional resumes,
+writing cover letters, practicing interview questions and understanding industry
+requirements.
+</p>
+</div><div class="card">
+<h2>Key Features</h2>
+<div class="feature-grid">
+<div class="feature">Resume Builder</div>
+<div class="feature">Cover Letter Generator</div>
+<div class="feature">Mock Interview Practice</div>
+<div class="feature">Industry Insights</div>
+<div class="feature">User Dashboard</div>
+<div class="feature">Career Profile</div>
+</div>
+</div>
+</section><!-- LOGIN --><section id="login" class="hidden">
+<div class="card">
+<h2>Login</h2>
+<input id="loginMail" placeholder="Email ID">
+<input id="loginPass" type="password" placeholder="Password">
+<button class="main" onclick="loginUser()">Login</button>
+<p id="loginMsg"></p>
+</div>
+</section><!-- REGISTER --><section id="signup" class="hidden">
+<div class="card">
+<h2>Register</h2>
+<input id="signupMail" placeholder="Email ID">
+<input id="signupPass" type="password" placeholder="Password">
+<button class="main" onclick="registerUser()">Create Account</button>
+<p id="signupMsg"></p>
+</div>
+</section><!-- BIO PROFILE --><section id="bio" class="hidden">
+<div class="card">
+<h2>Complete Your Career Profile</h2>
+<input id="bioName" placeholder="Full Name">
+<input id="bioField" placeholder="Career Field (e.g. Software Engineering)">
+<input id="bioSkills" placeholder="Skills">
+<select id="bioLevel">
+<option>Student</option>
+<option>Graduate</option>
+<option>Professional</option>
+</select>
+<button class="main" onclick="saveBio()">Save Profile</button>
+</div>
+</section><!-- DASHBOARD --><section id="dashboard" class="hidden">
+<div class="card">
+<h2>User Dashboard</h2>
+<button class="main" onclick="showSection('resume')">Build Resume</button>
+<button class="main" onclick="showSection('cover')">Generate Cover Letter</button>
+<button class="main" onclick="showSection('interview')">Mock Interview</button>
+<button class="main" onclick="showSection('insights')">Industry Insights</button>
+</div>
+</section><!-- RESUME --><section id="resume" class="hidden">
+<div class="card">
+<h2>Resume Builder</h2>
+<input id="rName" placeholder="Full Name">
+<input id="rSkills" placeholder="Skills">
+<textarea id="rEdu" placeholder="Education"></textarea>
+<textarea id="rExp" placeholder="Experience"></textarea>
+<button class="main" onclick="generateResumePDF()">Download Resume PDF</button>
+</div>
+</section><!-- COVER LETTER --><section id="cover" class="hidden">
+<div class="card">
+<h2>Cover Letter Generator</h2>
+<input id="cCompany" placeholder="Company Name">
+<input id="cRole" placeholder="Job Role">
+<textarea id="cBody" placeholder="Why are you suitable for this role?"></textarea>
+<button class="main" onclick="generateCoverPDF()">Download Cover Letter PDF</button>
+</div>
+</section><!-- MOCK INTERVIEW --><section id="interview" class="hidden">
+<div class="card">
+<h2>Mock Interview</h2><div class="question">Tell me about yourself.</div>
+<textarea id="a1"></textarea><div class="question">What are your strengths?</div>
+<textarea id="a2"></textarea><div class="question">Why should we hire you?</div>
+<textarea id="a3"></textarea><button class="main" onclick="generateFeedback()">Submit Answers</button>
+
+<h3>AI Feedback</h3>
+<pre id="feedback"></pre>
+</div>
+</section><!-- INDUSTRY INSIGHTS --><section id="insights" class="hidden">
+<div class="card">
+<h2>Industry Insights</h2>
+<p>Top Skills in Demand:</p>
+<ul>
+<li>Artificial Intelligence</li>
+<li>Data Analysis</li>
+<li>Cloud Computing</li>
+<li>Cybersecurity</li>
+<li>Software Development</li>
+</ul>
+</div>
+</section></div><footer>
+© 2026 AI Career Coach
+</footer><script>
+const {jsPDF}=window.jspdf
+let currentUser=null
+
+function showSection(id){
+document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"))
+document.getElementById(id).classList.remove("hidden")
+}
+
+function registerUser(){
+let email=document.getElementById("signupMail").value
+let pass=document.getElementById("signupPass").value
+
+let users=JSON.parse(localStorage.getItem("users")||"[]")
+users.push({email,pass,bio:false})
+
+localStorage.setItem("users",JSON.stringify(users))
+
+document.getElementById("signupMsg").innerText="Registration successful. Please login."
+}
+
+function loginUser(){
+let email=document.getElementById("loginMail").value
+let pass=document.getElementById("loginPass").value
+
+let users=JSON.parse(localStorage.getItem("users")||"[]")
+let user=users.find(u=>u.email===email)
+
+if(!user){
+document.getElementById("loginMsg").innerText="User not found. Please register first."
+showSection("signup")
+return
+}
+
+if(user.pass!==pass){
+document.getElementById("loginMsg").innerText="Incorrect Credentials"
+return
+}
+
+currentUser=email
+
+document.getElementById("status").innerText="Logged in as: "+email
+
+if(!user.bio) showSection("bio")
+else showSection("dashboard")
+}
+
+function openDashboard(){
+if(!currentUser){
+alert("Please login first")
+return
+}
+showSection("dashboard")
+}
+
+function saveBio(){
+let users=JSON.parse(localStorage.getItem("users"))
+
+users.forEach(u=>{
+if(u.email===currentUser) u.bio=true
+})
+
+localStorage.setItem("users",JSON.stringify(users))
+
+alert("Profile completed")
+showSection("dashboard")
+}
+
+function generateResumePDF(){
+let doc=new jsPDF()
+
+let name=document.getElementById("rName").value
+let skills=document.getElementById("rSkills").value
+let edu=document.getElementById("rEdu").value
+let exp=document.getElementById("rExp").value
+
+let y=20
+
+doc.setFontSize(18)
+doc.text(name,20,y)
+y+=10
+
+doc.setFontSize(12)
+doc.text("Skills: "+skills,20,y)
+y+=10
+
+doc.text("Education:",20,y)
+y+=8
+
+doc.text(edu,20,y)
+y+=10
+
+doc.text("Experience:",20,y)
+y+=8
+
+doc.text(exp,20,y)
+
+doc.save("resume.pdf")
+}
+
+function generateCoverPDF(){
+let doc=new jsPDF()
+
+let company=document.getElementById("cCompany").value
+let role=document.getElementById("cRole").value
+let body=document.getElementById("cBody").value
+
+let text=`Dear Hiring Manager at ${company},\n\nI am applying for the position of ${role}.\n\n${body}\n\nSincerely.`
+
+doc.text(text,20,20)
+
+doc.save("cover_letter.pdf")
+}
+
+function generateFeedback(){
+let a1=document.getElementById("a1").value.length
+let a2=document.getElementById("a2").value.length
+let a3=document.getElementById("a3").value.length
+
+let score=(a1+a2+a3)/3
+
+let feedback=""
+
+if(score<50) feedback="Your answers are too short. Try explaining your experiences in detail."
+else if(score<120) feedback="Good attempt. Add more examples and achievements."
+else feedback="Strong answers. You explained your thoughts clearly like a confident candidate."
+
+document.getElementById("feedback").innerText=feedback
+}
+
+</script></body>
+</html>
